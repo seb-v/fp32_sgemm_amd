@@ -1,6 +1,6 @@
 # Fast FP32 Matrix Multiplication on RDNA3 GPUs
 
-This repository contains the code used in an in-depth exploration of Fast FP32 Matrix Multiplication on RDNA3 GPUs. The analysis highlights optimization techniques and performance improvements tailored to RDNA3 architectures. For detailed insights, refer to the full deep dive here: [Fast GPU Matrix Multiplication on RDNA3](https://seb-v.github.io/optimization/update/2025/01/12/Fast-GPU-Matrix-multiplication.html)
+This repository contains the code used in an in-depth exploration of Fast FP32 Matrix Multiplication on RDNA3 GPUs. The analysis highlights optimization techniques and performance improvements tailored to RDNA3 architectures. For detailed insights, refer to the full deep dive here: [Fast GPU Matrix Multiplication on RDNA3](https://seb-v.github.io/optimization/update/2025/01/20/Fast-GPU-Matrix-multiplication.html)
 
 The current **best implementation outperforms rocBLAS by 60%**
 
