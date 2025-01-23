@@ -1,8 +1,8 @@
 # Fast FP32 Matrix Multiplication on RDNA3 GPUs
 
-This repository contains the code used in an in-depth exploration of Fast FP32 Matrix Multiplication on RDNA3 GPUs. The analysis highlights optimization techniques and performance improvements tailored to RDNA3 architectures. For detailed insights, refer to the full deep dive here: [Fast GPU Matrix Multiplication on RDNA3](https://seb-v.github.io/optimization/update/2025/01/20/Fast-GPU-Matrix-multiplication.html)
+This repository contains the code used in an in-depth exploration of Fast FP32 Matrix Multiplication on RDNA3 GPUs. The analysis highlights optimization techniques and performance improvements tailored to RDNA3 architectures. For detailed insights, refer to the full deep dive here: [Optimizing Matrix Multiplication on RDNA3: 50 TFlops and 60% Faster Than rocBLAS](https://seb-v.github.io/optimization/update/2025/01/20/Fast-GPU-Matrix-multiplication.html)
 
-The current **best implementation outperforms rocBLAS by 60%**
+The current best implementation reaches **50 TFLops** on a 7900 XTX and **outperforms rocBLAS by 60%**
 
 ![Alt Text](graph.jpg)
 
@@ -29,9 +29,10 @@ The current **best implementation outperforms rocBLAS by 60%**
 
 ### Building the project
 
-`sh
-./build.sh
-`
+1. Install the [AMD HIP SDK for Windows](https://www.amd.com/en/developer/resources/rocm-hub/hip-sdk.html)
+
+2. Run the script `./build.sh`
+
 ### Quick Details About the Kernels
 
 - **Kernel 1: Naive**
