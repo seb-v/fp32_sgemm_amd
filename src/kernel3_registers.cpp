@@ -16,11 +16,11 @@ __global__ void   kernel3_registers(float *a, float *b, float *c, int N, float a
     constexpr int TM = 4;
 
     constexpr int nbWaves = BLOCK_SIZE / 32;
-    // Warp Tile size 
+    // Wave Tile size 
     constexpr int WN = 64;
     constexpr int WM = BN * BM / nbWaves / WN;
 
-    // Number of warp on X & Y axis in the Block tile
+    // Number of wave on X & Y axis in the Block tile
     constexpr int nbWaveX = BN / WN;
     constexpr int nbWaveY = BM / WM;
 
@@ -29,18 +29,18 @@ __global__ void   kernel3_registers(float *a, float *b, float *c, int N, float a
     const int waveIdy = waveIndex / nbWaveX;
     const int indexInWave = threadIdx.x % 32;
 
-    // A warp is a block of 8x4 of the output matrix
+    // A wave is a block of 8x4 of the output matrix
     constexpr int nbThreadXPerWave = 8;
     constexpr int nbThreadYPerWave = 4;
 
-    // Thread coordinates in Warp
+    // Thread coordinates in Wave
     const int idxInWave = indexInWave % nbThreadXPerWave;
     const int idyInWave = indexInWave / nbThreadXPerWave;
 
     constexpr int nbIterWaveN = WN / (nbThreadXPerWave * TN);
     constexpr int nbIterWaveM = WM / (nbThreadYPerWave * TM);
 
-    // Warp Sub-tile size
+    // Wave Sub-tile size
     constexpr int SUBWN = WN / nbIterWaveN;
     constexpr int SUBWM = WM / nbIterWaveM;
 
@@ -85,13 +85,13 @@ __global__ void   kernel3_registers(float *a, float *b, float *c, int N, float a
         __syncthreads();
         for (int k = 0; k < BK; k += 1)
         {
-            // we cache A & B for the entire Warp tile
+            // we cache A & B for the entire Wave tile
             for (int iterWave = 0; iterWave < nbIterWaveN; iterWave++)
             {
                 for (int i = 0; i < TN; i++)
                 {
-                    int index = waveIdx * WN +     // warpId
-                                iterWave * SUBWN + // warp subtile
+                    int index = waveIdx * WN +     // waveId
+                                iterWave * SUBWN + // wave subtile
                                 TN * idxInWave +
                                 +i;
                     B_row[iterWave * TN + i] = Bs[k][index];
@@ -102,12 +102,12 @@ __global__ void   kernel3_registers(float *a, float *b, float *c, int N, float a
             {
                 for (int i = 0; i < TM; i++)
                 {
-                    int index = waveIdy * WM +     // warpId
-                                iterWave * SUBWM + // warp subtile
+                    int index = waveIdy * WM +     // waveId
+                                iterWave * SUBWM + // wave subtile
                                 TM * idyInWave +
                                 i;
 
-                    A_col[iterWave * TM + i] = As[k][index]; // TMP
+                    A_col[iterWave * TM + i] = As[k][index];
                 }
             }
 

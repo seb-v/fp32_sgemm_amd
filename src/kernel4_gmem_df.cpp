@@ -11,10 +11,10 @@ kernel4_gmem_db(float *a, float *b, float *c, int N, float alpha, float beta)
     // Block Tile size
     constexpr int BN = 128;
     constexpr int BM = 128;
-    // Number of Row or column we read per K blocks
+    // Number of Row or column we read per batch
     constexpr int BK = 8;
 
-    // Thread Tile size . 4x4 
+    // Thread Tile size
     constexpr int TN = 4;
     constexpr int TM = 4;
 
@@ -23,7 +23,7 @@ kernel4_gmem_db(float *a, float *b, float *c, int N, float alpha, float beta)
     constexpr int WN = 64;
     constexpr int WM = BN * BM / nbWaves / WN;
 
-    // Number of warp on X & Y axis in the Block tile
+    // Number of wave on X & Y axis in the Block tile
     constexpr int nbWaveX = BN / WN;
     constexpr int nbWaveY = BM / WM;
 
@@ -32,7 +32,7 @@ kernel4_gmem_db(float *a, float *b, float *c, int N, float alpha, float beta)
     const int waveIdy = waveIndex / nbWaveX;
     const int indexInWave = threadIdx.x % 32;
 
-    // A warp is a block of 8x4 of the output matrix
+    // A wave is a block of 8x4 of the output matrix
     constexpr int nbThreadXPerWave = 8;
     constexpr int nbThreadYPerWave = 4;
 
@@ -112,8 +112,8 @@ kernel4_gmem_db(float *a, float *b, float *c, int N, float alpha, float beta)
             {
                 for (int i = 0; i < TN; i++)
                 {
-                    int index = waveIdx * WN +     // warpId
-                                iterWave * SUBWN + // warp subtile
+                    int index = waveIdx * WN +     // waveId
+                                iterWave * SUBWN + // wave subtile
                                 TN * idxInWave +
                                 +i;
                     B_row[iterWave * TN + i] = Bs[k][index];
@@ -124,8 +124,8 @@ kernel4_gmem_db(float *a, float *b, float *c, int N, float alpha, float beta)
             {
                 for (int i = 0; i < TM; i++)
                 {
-                    int index = waveIdy * WM +     // warpId
-                                iterWave * SUBWM + // warp subtile
+                    int index = waveIdy * WM +     // waveId
+                                iterWave * SUBWM + // wave subtile
                                 TM * idyInWave +
                                 i;
 

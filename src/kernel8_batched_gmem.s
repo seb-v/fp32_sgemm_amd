@@ -616,7 +616,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -715,7 +714,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -732,7 +730,7 @@ s_setprio 0
 	;s_cmpk_lg_i32 s14, 0x1000
 	s_waitcnt lgkmcnt(0)
 
-;	; new vpgrs allocation
+;	new vpgrs allocation
 
 v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
 s_setprio 1
@@ -813,7 +811,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -902,8 +899,6 @@ s_setprio 0
 
 
 	; Global memory read for matrix A
-	;s_clause 0x7
-
 	s_clause 0x1
 	global_load_b32	 v177, v215, s[44:45]
 	global_load_b32	 v178, v215, s[46:47]
@@ -915,7 +910,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -1014,7 +1008,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -1110,7 +1103,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -1126,7 +1118,7 @@ s_setprio 0
 	v_add_nc_u32_e32 v202, 0x200, v202
 	s_waitcnt lgkmcnt(0)
 
-;	; new vpgrs allocation
+;	new vpgrs allocation
 
 v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
 s_setprio 1
@@ -1207,7 +1199,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202

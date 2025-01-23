@@ -8,43 +8,44 @@ __global__ void
 __launch_bounds__(BLOCK_SIZE) 
 kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
 {
-    // Block Tile size (square)
+    // Block Tile size
     constexpr int BN = 128;
     constexpr int BM = 128;
-    constexpr int BK = 8; // Number of Row or column we read per K blocks
+    // Number of Row or column we read per batch
+    constexpr int BK = 8; 
 
-    // Thread Tile size . 4x4 for LDS 128 reads
+    // Thread Tile size . 4x4
     constexpr int TN = 4;
     constexpr int TM = 4;
 
-    constexpr int nbWarps = BLOCK_SIZE / 32;
-    // Warp Tile size : 128x32
+    constexpr int nbWaves = BLOCK_SIZE / 32;
+    // Wave Tile size
     constexpr int WN = 128;
-    constexpr int WM = BN * BM / nbWarps / WN;
+    constexpr int WM = BN * BM / nbWaves / WN;
 
-    // Number of warp on X & Y axis in the Block tile
-    constexpr int nbWarpX = BN / WN;
-    constexpr int nbWarpY = BM / WM;
+    // Number of wave on X & Y axis in the Block tile
+    constexpr int nbWaveX = BN / WN;
+    constexpr int nbWaveY = BM / WM;
 
-    const int warpIndex = threadIdx.x / 32;
-    const int warpIdx = warpIndex % nbWarpX;
-    const int warpIdy = warpIndex / nbWarpX;
-    const int indexInWarp = threadIdx.x % 32;
+    const int waveIndex = threadIdx.x / 32;
+    const int waveIdx = waveIndex % nbWaveX;
+    const int waveIdy = waveIndex / nbWaveX;
+    const int indexInWave = threadIdx.x % 32;
 
-    // A warp is a block of 8x4 of the output matrix
-    constexpr int nbThreadXPerWarp = 8;
-    constexpr int nbThreadYPerWarp = 4;
+    // A wave is a block of 8x4 of the output matrix
+    constexpr int nbThreadXPerWave = 8;
+    constexpr int nbThreadYPerWave = 4;
 
-    // Thread coordinates in Warp
-    const int idxInWarp = indexInWarp % nbThreadXPerWarp;
-    const int idyInWarp = indexInWarp / nbThreadXPerWarp;
+    // Thread coordinates in Wave
+    const int idxInWave = indexInWave % nbThreadXPerWave;
+    const int idyInWave = indexInWave / nbThreadXPerWave;
 
-    constexpr int nbIterWarpN = WN / (nbThreadXPerWarp * TN);
-    constexpr int nbIterWarpM = WM / (nbThreadYPerWarp * TM);
+    constexpr int nbIterWaveN = WN / (nbThreadXPerWave * TN);
+    constexpr int nbIterWaveM = WM / (nbThreadYPerWave * TM);
 
-    // Warp Sub-tile size
-    constexpr int SUBWN = WN / nbIterWarpN;
-    constexpr int SUBWM = WM / nbIterWarpM;
+    // Wave Sub-tile size
+    constexpr int SUBWN = WN / nbIterWaveN;
+    constexpr int SUBWM = WM / nbIterWaveM;
 
     // Thread mapping to read BKxBN block from A
     int rAIdx = threadIdx.x % BK;
@@ -58,13 +59,13 @@ kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
     constexpr int nbReadsB = BN * BK / BLOCK_SIZE;
     constexpr int nbReadsA = BM * BK / BLOCK_SIZE;
 
-    float A_col[nbIterWarpM * TM];
-    float B_row[nbIterWarpN * TN];
+    float A_col[nbIterWaveM * TM];
+    float B_row[nbIterWaveN * TN];
 
     __shared__ float As[BK][BM+4]; // 4 padding to avoid bank conflicts
     __shared__ float Bs[BK][BN];
 
-    float c_regs[TM * nbIterWarpM * TN * nbIterWarpN] = {0.0f};
+    float c_regs[TM * nbIterWaveM * TN * nbIterWaveN] = {0.0f};
 
     for (int i = 0; i < nbReadsB; i++)
     {
@@ -103,48 +104,47 @@ kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
             }
         }
 
-
 #pragma unroll UNROLL
         for (int k = 0; k < BK; k += 1)
         {
-            // we cache A & B for the entire Warp tile
-            for (int iterWarp = 0; iterWarp < nbIterWarpN; iterWarp++)
+            // we cache A & B for the entire Wave tile
+            for (int iterWave = 0; iterWave < nbIterWaveN; iterWave++)
             {
                 for (int i = 0; i < TN; i++)
                 {
-                    int index = warpIdx * WN +     // warpId
-                                iterWarp * SUBWN + // warp subtile
-                                TN * idxInWarp +
+                    int index = waveIdx * WN +     // waveId
+                                iterWave * SUBWN + // wave subtile
+                                TN * idxInWave +
                                 +i;
-                    B_row[iterWarp * TN + i] = Bs[k][index];
+                    B_row[iterWave * TN + i] = Bs[k][index];
                 }
             }
 
-            for (int iterWarp = 0; iterWarp < nbIterWarpM; iterWarp++)
+            for (int iterWave = 0; iterWave < nbIterWaveM; iterWave++)
             {
                 for (int i = 0; i < TM; i++)
                 {
-                    int index = warpIdy * WM +     // warpId
-                                iterWarp * SUBWM + // warp subtile
-                                TM * idyInWarp +
+                    int index = waveIdy * WM +     // waveId
+                                iterWave * SUBWM + // wave subtile
+                                TM * idyInWave +
                                 i;
 
-                    A_col[iterWarp * TM + i] = As[k][index]; // TMP
+                    A_col[iterWave * TM + i] = As[k][index];
                 }
             }
 
             // we accumulate to C_regs
-            for (int iterWarpM = 0; iterWarpM < nbIterWarpM; iterWarpM++)
+            for (int iterWaveM = 0; iterWaveM < nbIterWaveM; iterWaveM++)
             {
-                for (int iterWarpN = 0; iterWarpN < nbIterWarpN; iterWarpN++)
+                for (int iterWaveN = 0; iterWaveN < nbIterWaveN; iterWaveN++)
                 {
                     for (int yt = 0; yt < TM; yt++)
                     {
                         for (int xt = 0; xt < TN; xt++)
                         {
-                            const int x = iterWarpN * TN + xt;
-                            const int y = iterWarpM * TM + yt;
-                            c_regs[y * TN * nbIterWarpN + x] += A_col[y] * B_row[x];
+                            const int x = iterWaveN * TN + xt;
+                            const int y = iterWaveM * TM + yt;
+                            c_regs[y * TN * nbIterWaveN + x] += A_col[y] * B_row[x];
                         }
                     }
                 }
@@ -170,18 +170,18 @@ kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
         }
     }
 
-    for (int iterWarpM = 0; iterWarpM < nbIterWarpM; iterWarpM++)
+    for (int iterWaveM = 0; iterWaveM < nbIterWaveM; iterWaveM++)
     {
-        for (int iterWarpN = 0; iterWarpN < nbIterWarpN; iterWarpN++)
+        for (int iterWaveN = 0; iterWaveN < nbIterWaveN; iterWaveN++)
         {
-            int xOut = blockIdx.x * BN + warpIdx * WN + iterWarpN * SUBWN + TN * idxInWarp;
-            int yOut = blockIdx.y * BM + warpIdy * WM + iterWarpM * SUBWM + TM * idyInWarp;
+            int xOut = blockIdx.x * BN + waveIdx * WN + iterWaveN * SUBWN + TN * idxInWave;
+            int yOut = blockIdx.y * BM + waveIdy * WM + iterWaveM * SUBWM + TM * idyInWave;
             for (int yt = 0; yt < TM; yt++)
             {
                 for (int xt = 0; xt < TN; xt++)
                 {
                     int indexC = N * (yOut + yt) + xOut + xt;
-                    c[indexC] = beta * c[indexC] + alpha * c_regs[TN * nbIterWarpN * (iterWarpM * TM + yt) + (iterWarpN * TN + xt)];
+                    c[indexC] = beta * c[indexC] + alpha * c_regs[TN * nbIterWaveN * (iterWaveM * TM + yt) + (iterWaveN * TN + xt)];
                 }
             }
         }

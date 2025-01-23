@@ -662,7 +662,196 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
+
+ ;B on bank 0-1 
+	ds_load_b64 v[184:185], v202
+	ds_load_b64 v[188:189], v202 offset: 8 
+	ds_load_b64 v[192:193], v202 offset: 128
+	ds_load_b64 v[196:197], v202 offset: 136 
+	ds_load_b64 v[200:201], v202 offset: 256
+	ds_load_b64 v[204:205], v202 offset: 264 
+	ds_load_b64 v[208:209], v202 offset: 384
+	ds_load_b64 v[212:213], v202 offset: 392 
+
+	v_add_nc_u32_e32 v183, 0x210, v183
+	v_add_nc_u32_e32 v202, 0x200, v202
+	;s_cmpk_lg_i32 s14, 0x1000
+	s_waitcnt lgkmcnt(0)
+
+;	new vpgrs allocation
+
+v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
+s_setprio 1
+v_dual_fmac_f32 v3, v186, v185 :: v_dual_fmac_f32 v4, v187, v184
+v_dual_fmac_f32 v9, v186, v188 :: v_dual_fmac_f32 v6, v187, v189
+v_dual_fmac_f32 v7, v187, v188 :: v_dual_fmac_f32 v8, v186, v189
+v_dual_fmac_f32 v13, v190, v188 :: v_dual_fmac_f32 v10, v191, v189
+v_dual_fmac_f32 v11, v190, v189 :: v_dual_fmac_f32 v12, v191, v188
+v_dual_fmac_f32 v17, v190, v184 :: v_dual_fmac_f32 v14, v191, v185
+v_dual_fmac_f32 v15, v191, v184 :: v_dual_fmac_f32 v16, v190, v185
+v_dual_fmac_f32 v21, v194, v184 :: v_dual_fmac_f32 v18, v195, v185
+v_dual_fmac_f32 v19, v194, v185 :: v_dual_fmac_f32 v20, v195, v184
+v_dual_fmac_f32 v25, v194, v188 :: v_dual_fmac_f32 v22, v195, v189
+v_dual_fmac_f32 v23, v195, v188 :: v_dual_fmac_f32 v24, v194, v189
+v_dual_fmac_f32 v29, v198, v188 :: v_dual_fmac_f32 v26, v199, v189
+v_dual_fmac_f32 v27, v198, v189 :: v_dual_fmac_f32 v28, v199, v188
+v_dual_fmac_f32 v33, v198, v192 :: v_dual_fmac_f32 v30, v199, v193
+v_dual_fmac_f32 v31, v199, v192 :: v_dual_fmac_f32 v32, v198, v193
+v_dual_fmac_f32 v37, v186, v192 :: v_dual_fmac_f32 v34, v187, v193
+v_dual_fmac_f32 v35, v186, v193 :: v_dual_fmac_f32 v36, v187, v192
+v_dual_fmac_f32 v41, v186, v196 :: v_dual_fmac_f32 v38, v187, v197
+v_dual_fmac_f32 v39, v187, v196 :: v_dual_fmac_f32 v40, v186, v197
+v_dual_fmac_f32 v45, v190, v196 :: v_dual_fmac_f32 v42, v191, v197
+v_dual_fmac_f32 v43, v190, v197 :: v_dual_fmac_f32 v44, v191, v196
+v_dual_fmac_f32 v49, v190, v192 :: v_dual_fmac_f32 v46, v191, v193
+v_dual_fmac_f32 v47, v191, v192 :: v_dual_fmac_f32 v48, v190, v193
+v_dual_fmac_f32 v53, v194, v192 :: v_dual_fmac_f32 v50, v195, v193
+v_dual_fmac_f32 v51, v194, v193 :: v_dual_fmac_f32 v52, v195, v192
+v_dual_fmac_f32 v57, v194, v196 :: v_dual_fmac_f32 v54, v195, v197
+v_dual_fmac_f32 v55, v195, v196 :: v_dual_fmac_f32 v56, v194, v197
+v_dual_fmac_f32 v61, v198, v196 :: v_dual_fmac_f32 v58, v199, v197
+v_dual_fmac_f32 v59, v198, v197 :: v_dual_fmac_f32 v60, v199, v196
+v_dual_fmac_f32 v65, v198, v200 :: v_dual_fmac_f32 v62, v199, v201
+v_dual_fmac_f32 v63, v199, v200 :: v_dual_fmac_f32 v64, v198, v201
+v_dual_fmac_f32 v69, v186, v200 :: v_dual_fmac_f32 v66, v187, v201
+v_dual_fmac_f32 v67, v186, v201 :: v_dual_fmac_f32 v68, v187, v200
+v_dual_fmac_f32 v73, v186, v204 :: v_dual_fmac_f32 v70, v187, v205
+v_dual_fmac_f32 v71, v187, v204 :: v_dual_fmac_f32 v72, v186, v205
+v_dual_fmac_f32 v77, v190, v204 :: v_dual_fmac_f32 v74, v191, v205
+v_dual_fmac_f32 v75, v190, v205 :: v_dual_fmac_f32 v76, v191, v204
+v_dual_fmac_f32 v81, v190, v200 :: v_dual_fmac_f32 v78, v191, v201
+v_dual_fmac_f32 v79, v191, v200 :: v_dual_fmac_f32 v80, v190, v201
+v_dual_fmac_f32 v85, v194, v200 :: v_dual_fmac_f32 v82, v195, v201
+v_dual_fmac_f32 v83, v194, v201 :: v_dual_fmac_f32 v84, v195, v200
+v_dual_fmac_f32 v89, v194, v204 :: v_dual_fmac_f32 v86, v195, v205
+v_dual_fmac_f32 v87, v195, v204 :: v_dual_fmac_f32 v88, v194, v205
+v_dual_fmac_f32 v93, v198, v204 :: v_dual_fmac_f32 v90, v199, v205
+v_dual_fmac_f32 v91, v198, v205 :: v_dual_fmac_f32 v92, v199, v204
+v_dual_fmac_f32 v97, v198, v208 :: v_dual_fmac_f32 v94, v199, v209
+v_dual_fmac_f32 v95, v199, v208 :: v_dual_fmac_f32 v96, v198, v209
+v_dual_fmac_f32 v101, v186, v208 :: v_dual_fmac_f32 v98, v187, v209
+v_dual_fmac_f32 v99, v186, v209 :: v_dual_fmac_f32 v100, v187, v208
+v_dual_fmac_f32 v105, v186, v212 :: v_dual_fmac_f32 v102, v187, v213
+v_dual_fmac_f32 v103, v187, v212 :: v_dual_fmac_f32 v104, v186, v213
+v_dual_fmac_f32 v109, v190, v212 :: v_dual_fmac_f32 v106, v191, v213
+v_dual_fmac_f32 v107, v190, v213 :: v_dual_fmac_f32 v108, v191, v212
+v_dual_fmac_f32 v113, v190, v208 :: v_dual_fmac_f32 v110, v191, v209
+v_dual_fmac_f32 v111, v191, v208 :: v_dual_fmac_f32 v112, v190, v209
+v_dual_fmac_f32 v117, v194, v208 :: v_dual_fmac_f32 v114, v195, v209
+v_dual_fmac_f32 v115, v194, v209 :: v_dual_fmac_f32 v116, v195, v208
+v_dual_fmac_f32 v121, v194, v212 :: v_dual_fmac_f32 v122, v195, v213
+v_dual_fmac_f32 v123, v195, v212 :: v_dual_fmac_f32 v120, v194, v213
+v_dual_fmac_f32 v129, v198, v212 :: v_dual_fmac_f32 v126, v199, v213
+v_dual_fmac_f32 v127, v198, v213 :: v_dual_fmac_f32 v124, v199, v212
+v_dual_fmac_f32 v133, v198, v184 :: v_dual_fmac_f32 v214, v199, v185
+v_dual_fmac_f32 v131, v199, v184 :: v_dual_fmac_f32 v128, v198, v185
+
+s_setprio 0
+
+
+
+	s_clause 0xB;
+ ;A on bank 2-3 
+	ds_load_b64 v[186:187], v183
+	ds_load_b64 v[190:191], v183 offset: 8
+	ds_load_b64 v[194:195], v183 offset: 64
+	ds_load_b64 v[198:199], v183 offset: 72
+	
+
+ ;B on bank 0-1 
+	ds_load_b64 v[184:185], v202
+	ds_load_b64 v[188:189], v202 offset: 8 
+	ds_load_b64 v[192:193], v202 offset: 128
+	ds_load_b64 v[196:197], v202 offset: 136 
+	ds_load_b64 v[200:201], v202 offset: 256
+	ds_load_b64 v[204:205], v202 offset: 264 
+	ds_load_b64 v[208:209], v202 offset: 384
+	ds_load_b64 v[212:213], v202 offset: 392 
+
+	v_add_nc_u32_e32 v183, 0x210, v183
+	v_add_nc_u32_e32 v202, 0x200, v202
+	;s_cmpk_lg_i32 s14, 0x1000
+	s_waitcnt lgkmcnt(0)
+
+;	new vpgrs allocation
+
+v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
+s_setprio 1
+v_dual_fmac_f32 v3, v186, v185 :: v_dual_fmac_f32 v4, v187, v184
+v_dual_fmac_f32 v9, v186, v188 :: v_dual_fmac_f32 v6, v187, v189
+v_dual_fmac_f32 v7, v187, v188 :: v_dual_fmac_f32 v8, v186, v189
+v_dual_fmac_f32 v13, v190, v188 :: v_dual_fmac_f32 v10, v191, v189
+v_dual_fmac_f32 v11, v190, v189 :: v_dual_fmac_f32 v12, v191, v188
+v_dual_fmac_f32 v17, v190, v184 :: v_dual_fmac_f32 v14, v191, v185
+v_dual_fmac_f32 v15, v191, v184 :: v_dual_fmac_f32 v16, v190, v185
+v_dual_fmac_f32 v21, v194, v184 :: v_dual_fmac_f32 v18, v195, v185
+v_dual_fmac_f32 v19, v194, v185 :: v_dual_fmac_f32 v20, v195, v184
+v_dual_fmac_f32 v25, v194, v188 :: v_dual_fmac_f32 v22, v195, v189
+v_dual_fmac_f32 v23, v195, v188 :: v_dual_fmac_f32 v24, v194, v189
+v_dual_fmac_f32 v29, v198, v188 :: v_dual_fmac_f32 v26, v199, v189
+v_dual_fmac_f32 v27, v198, v189 :: v_dual_fmac_f32 v28, v199, v188
+v_dual_fmac_f32 v33, v198, v192 :: v_dual_fmac_f32 v30, v199, v193
+v_dual_fmac_f32 v31, v199, v192 :: v_dual_fmac_f32 v32, v198, v193
+v_dual_fmac_f32 v37, v186, v192 :: v_dual_fmac_f32 v34, v187, v193
+v_dual_fmac_f32 v35, v186, v193 :: v_dual_fmac_f32 v36, v187, v192
+v_dual_fmac_f32 v41, v186, v196 :: v_dual_fmac_f32 v38, v187, v197
+v_dual_fmac_f32 v39, v187, v196 :: v_dual_fmac_f32 v40, v186, v197
+v_dual_fmac_f32 v45, v190, v196 :: v_dual_fmac_f32 v42, v191, v197
+v_dual_fmac_f32 v43, v190, v197 :: v_dual_fmac_f32 v44, v191, v196
+v_dual_fmac_f32 v49, v190, v192 :: v_dual_fmac_f32 v46, v191, v193
+v_dual_fmac_f32 v47, v191, v192 :: v_dual_fmac_f32 v48, v190, v193
+v_dual_fmac_f32 v53, v194, v192 :: v_dual_fmac_f32 v50, v195, v193
+v_dual_fmac_f32 v51, v194, v193 :: v_dual_fmac_f32 v52, v195, v192
+v_dual_fmac_f32 v57, v194, v196 :: v_dual_fmac_f32 v54, v195, v197
+v_dual_fmac_f32 v55, v195, v196 :: v_dual_fmac_f32 v56, v194, v197
+v_dual_fmac_f32 v61, v198, v196 :: v_dual_fmac_f32 v58, v199, v197
+v_dual_fmac_f32 v59, v198, v197 :: v_dual_fmac_f32 v60, v199, v196
+v_dual_fmac_f32 v65, v198, v200 :: v_dual_fmac_f32 v62, v199, v201
+v_dual_fmac_f32 v63, v199, v200 :: v_dual_fmac_f32 v64, v198, v201
+v_dual_fmac_f32 v69, v186, v200 :: v_dual_fmac_f32 v66, v187, v201
+v_dual_fmac_f32 v67, v186, v201 :: v_dual_fmac_f32 v68, v187, v200
+v_dual_fmac_f32 v73, v186, v204 :: v_dual_fmac_f32 v70, v187, v205
+v_dual_fmac_f32 v71, v187, v204 :: v_dual_fmac_f32 v72, v186, v205
+v_dual_fmac_f32 v77, v190, v204 :: v_dual_fmac_f32 v74, v191, v205
+v_dual_fmac_f32 v75, v190, v205 :: v_dual_fmac_f32 v76, v191, v204
+v_dual_fmac_f32 v81, v190, v200 :: v_dual_fmac_f32 v78, v191, v201
+v_dual_fmac_f32 v79, v191, v200 :: v_dual_fmac_f32 v80, v190, v201
+v_dual_fmac_f32 v85, v194, v200 :: v_dual_fmac_f32 v82, v195, v201
+v_dual_fmac_f32 v83, v194, v201 :: v_dual_fmac_f32 v84, v195, v200
+v_dual_fmac_f32 v89, v194, v204 :: v_dual_fmac_f32 v86, v195, v205
+v_dual_fmac_f32 v87, v195, v204 :: v_dual_fmac_f32 v88, v194, v205
+v_dual_fmac_f32 v93, v198, v204 :: v_dual_fmac_f32 v90, v199, v205
+v_dual_fmac_f32 v91, v198, v205 :: v_dual_fmac_f32 v92, v199, v204
+v_dual_fmac_f32 v97, v198, v208 :: v_dual_fmac_f32 v94, v199, v209
+v_dual_fmac_f32 v95, v199, v208 :: v_dual_fmac_f32 v96, v198, v209
+v_dual_fmac_f32 v101, v186, v208 :: v_dual_fmac_f32 v98, v187, v209
+v_dual_fmac_f32 v99, v186, v209 :: v_dual_fmac_f32 v100, v187, v208
+v_dual_fmac_f32 v105, v186, v212 :: v_dual_fmac_f32 v102, v187, v213
+v_dual_fmac_f32 v103, v187, v212 :: v_dual_fmac_f32 v104, v186, v213
+v_dual_fmac_f32 v109, v190, v212 :: v_dual_fmac_f32 v106, v191, v213
+v_dual_fmac_f32 v107, v190, v213 :: v_dual_fmac_f32 v108, v191, v212
+v_dual_fmac_f32 v113, v190, v208 :: v_dual_fmac_f32 v110, v191, v209
+v_dual_fmac_f32 v111, v191, v208 :: v_dual_fmac_f32 v112, v190, v209
+v_dual_fmac_f32 v117, v194, v208 :: v_dual_fmac_f32 v114, v195, v209
+v_dual_fmac_f32 v115, v194, v209 :: v_dual_fmac_f32 v116, v195, v208
+v_dual_fmac_f32 v121, v194, v212 :: v_dual_fmac_f32 v122, v195, v213
+v_dual_fmac_f32 v123, v195, v212 :: v_dual_fmac_f32 v120, v194, v213
+v_dual_fmac_f32 v129, v198, v212 :: v_dual_fmac_f32 v126, v199, v213
+v_dual_fmac_f32 v127, v198, v213 :: v_dual_fmac_f32 v124, v199, v212
+v_dual_fmac_f32 v133, v198, v184 :: v_dual_fmac_f32 v214, v199, v185
+v_dual_fmac_f32 v131, v199, v184 :: v_dual_fmac_f32 v128, v198, v185
+
+s_setprio 0
+
+
+
+	s_clause 0xB;
+ ;A on bank 2-3 
+	ds_load_b64 v[186:187], v183
+	ds_load_b64 v[190:191], v183 offset: 8
+	ds_load_b64 v[194:195], v183 offset: 64
+	ds_load_b64 v[198:199], v183 offset: 72
+	
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -758,7 +947,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -854,199 +1042,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
-
- ;B on bank 0-1 
-	ds_load_b64 v[184:185], v202
-	ds_load_b64 v[188:189], v202 offset: 8 
-	ds_load_b64 v[192:193], v202 offset: 128
-	ds_load_b64 v[196:197], v202 offset: 136 
-	ds_load_b64 v[200:201], v202 offset: 256
-	ds_load_b64 v[204:205], v202 offset: 264 
-	ds_load_b64 v[208:209], v202 offset: 384
-	ds_load_b64 v[212:213], v202 offset: 392 
-
-	v_add_nc_u32_e32 v183, 0x210, v183
-	v_add_nc_u32_e32 v202, 0x200, v202
-	;s_cmpk_lg_i32 s14, 0x1000
-	s_waitcnt lgkmcnt(0)
-
-;	; new vpgrs allocation
-
-v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
-s_setprio 1
-v_dual_fmac_f32 v3, v186, v185 :: v_dual_fmac_f32 v4, v187, v184
-v_dual_fmac_f32 v9, v186, v188 :: v_dual_fmac_f32 v6, v187, v189
-v_dual_fmac_f32 v7, v187, v188 :: v_dual_fmac_f32 v8, v186, v189
-v_dual_fmac_f32 v13, v190, v188 :: v_dual_fmac_f32 v10, v191, v189
-v_dual_fmac_f32 v11, v190, v189 :: v_dual_fmac_f32 v12, v191, v188
-v_dual_fmac_f32 v17, v190, v184 :: v_dual_fmac_f32 v14, v191, v185
-v_dual_fmac_f32 v15, v191, v184 :: v_dual_fmac_f32 v16, v190, v185
-v_dual_fmac_f32 v21, v194, v184 :: v_dual_fmac_f32 v18, v195, v185
-v_dual_fmac_f32 v19, v194, v185 :: v_dual_fmac_f32 v20, v195, v184
-v_dual_fmac_f32 v25, v194, v188 :: v_dual_fmac_f32 v22, v195, v189
-v_dual_fmac_f32 v23, v195, v188 :: v_dual_fmac_f32 v24, v194, v189
-v_dual_fmac_f32 v29, v198, v188 :: v_dual_fmac_f32 v26, v199, v189
-v_dual_fmac_f32 v27, v198, v189 :: v_dual_fmac_f32 v28, v199, v188
-v_dual_fmac_f32 v33, v198, v192 :: v_dual_fmac_f32 v30, v199, v193
-v_dual_fmac_f32 v31, v199, v192 :: v_dual_fmac_f32 v32, v198, v193
-v_dual_fmac_f32 v37, v186, v192 :: v_dual_fmac_f32 v34, v187, v193
-v_dual_fmac_f32 v35, v186, v193 :: v_dual_fmac_f32 v36, v187, v192
-v_dual_fmac_f32 v41, v186, v196 :: v_dual_fmac_f32 v38, v187, v197
-v_dual_fmac_f32 v39, v187, v196 :: v_dual_fmac_f32 v40, v186, v197
-v_dual_fmac_f32 v45, v190, v196 :: v_dual_fmac_f32 v42, v191, v197
-v_dual_fmac_f32 v43, v190, v197 :: v_dual_fmac_f32 v44, v191, v196
-v_dual_fmac_f32 v49, v190, v192 :: v_dual_fmac_f32 v46, v191, v193
-v_dual_fmac_f32 v47, v191, v192 :: v_dual_fmac_f32 v48, v190, v193
-v_dual_fmac_f32 v53, v194, v192 :: v_dual_fmac_f32 v50, v195, v193
-v_dual_fmac_f32 v51, v194, v193 :: v_dual_fmac_f32 v52, v195, v192
-v_dual_fmac_f32 v57, v194, v196 :: v_dual_fmac_f32 v54, v195, v197
-v_dual_fmac_f32 v55, v195, v196 :: v_dual_fmac_f32 v56, v194, v197
-v_dual_fmac_f32 v61, v198, v196 :: v_dual_fmac_f32 v58, v199, v197
-v_dual_fmac_f32 v59, v198, v197 :: v_dual_fmac_f32 v60, v199, v196
-v_dual_fmac_f32 v65, v198, v200 :: v_dual_fmac_f32 v62, v199, v201
-v_dual_fmac_f32 v63, v199, v200 :: v_dual_fmac_f32 v64, v198, v201
-v_dual_fmac_f32 v69, v186, v200 :: v_dual_fmac_f32 v66, v187, v201
-v_dual_fmac_f32 v67, v186, v201 :: v_dual_fmac_f32 v68, v187, v200
-v_dual_fmac_f32 v73, v186, v204 :: v_dual_fmac_f32 v70, v187, v205
-v_dual_fmac_f32 v71, v187, v204 :: v_dual_fmac_f32 v72, v186, v205
-v_dual_fmac_f32 v77, v190, v204 :: v_dual_fmac_f32 v74, v191, v205
-v_dual_fmac_f32 v75, v190, v205 :: v_dual_fmac_f32 v76, v191, v204
-v_dual_fmac_f32 v81, v190, v200 :: v_dual_fmac_f32 v78, v191, v201
-v_dual_fmac_f32 v79, v191, v200 :: v_dual_fmac_f32 v80, v190, v201
-v_dual_fmac_f32 v85, v194, v200 :: v_dual_fmac_f32 v82, v195, v201
-v_dual_fmac_f32 v83, v194, v201 :: v_dual_fmac_f32 v84, v195, v200
-v_dual_fmac_f32 v89, v194, v204 :: v_dual_fmac_f32 v86, v195, v205
-v_dual_fmac_f32 v87, v195, v204 :: v_dual_fmac_f32 v88, v194, v205
-v_dual_fmac_f32 v93, v198, v204 :: v_dual_fmac_f32 v90, v199, v205
-v_dual_fmac_f32 v91, v198, v205 :: v_dual_fmac_f32 v92, v199, v204
-v_dual_fmac_f32 v97, v198, v208 :: v_dual_fmac_f32 v94, v199, v209
-v_dual_fmac_f32 v95, v199, v208 :: v_dual_fmac_f32 v96, v198, v209
-v_dual_fmac_f32 v101, v186, v208 :: v_dual_fmac_f32 v98, v187, v209
-v_dual_fmac_f32 v99, v186, v209 :: v_dual_fmac_f32 v100, v187, v208
-v_dual_fmac_f32 v105, v186, v212 :: v_dual_fmac_f32 v102, v187, v213
-v_dual_fmac_f32 v103, v187, v212 :: v_dual_fmac_f32 v104, v186, v213
-v_dual_fmac_f32 v109, v190, v212 :: v_dual_fmac_f32 v106, v191, v213
-v_dual_fmac_f32 v107, v190, v213 :: v_dual_fmac_f32 v108, v191, v212
-v_dual_fmac_f32 v113, v190, v208 :: v_dual_fmac_f32 v110, v191, v209
-v_dual_fmac_f32 v111, v191, v208 :: v_dual_fmac_f32 v112, v190, v209
-v_dual_fmac_f32 v117, v194, v208 :: v_dual_fmac_f32 v114, v195, v209
-v_dual_fmac_f32 v115, v194, v209 :: v_dual_fmac_f32 v116, v195, v208
-v_dual_fmac_f32 v121, v194, v212 :: v_dual_fmac_f32 v122, v195, v213
-v_dual_fmac_f32 v123, v195, v212 :: v_dual_fmac_f32 v120, v194, v213
-v_dual_fmac_f32 v129, v198, v212 :: v_dual_fmac_f32 v126, v199, v213
-v_dual_fmac_f32 v127, v198, v213 :: v_dual_fmac_f32 v124, v199, v212
-v_dual_fmac_f32 v133, v198, v184 :: v_dual_fmac_f32 v214, v199, v185
-v_dual_fmac_f32 v131, v199, v184 :: v_dual_fmac_f32 v128, v198, v185
-
-s_setprio 0
-
-
-
-	s_clause 0xB;
- ;A on bank 2-3 
-	ds_load_b64 v[186:187], v183
-	ds_load_b64 v[190:191], v183 offset: 8
-	ds_load_b64 v[194:195], v183 offset: 64
-	ds_load_b64 v[198:199], v183 offset: 72
-	
-;	s_addk_i32 s14, 0x200
-
- ;B on bank 0-1 
-	ds_load_b64 v[184:185], v202
-	ds_load_b64 v[188:189], v202 offset: 8 
-	ds_load_b64 v[192:193], v202 offset: 128
-	ds_load_b64 v[196:197], v202 offset: 136 
-	ds_load_b64 v[200:201], v202 offset: 256
-	ds_load_b64 v[204:205], v202 offset: 264 
-	ds_load_b64 v[208:209], v202 offset: 384
-	ds_load_b64 v[212:213], v202 offset: 392 
-
-	v_add_nc_u32_e32 v183, 0x210, v183
-	v_add_nc_u32_e32 v202, 0x200, v202
-	;s_cmpk_lg_i32 s14, 0x1000
-	s_waitcnt lgkmcnt(0)
-
-;	; new vpgrs allocation
-
-v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
-s_setprio 1
-v_dual_fmac_f32 v3, v186, v185 :: v_dual_fmac_f32 v4, v187, v184
-v_dual_fmac_f32 v9, v186, v188 :: v_dual_fmac_f32 v6, v187, v189
-v_dual_fmac_f32 v7, v187, v188 :: v_dual_fmac_f32 v8, v186, v189
-v_dual_fmac_f32 v13, v190, v188 :: v_dual_fmac_f32 v10, v191, v189
-v_dual_fmac_f32 v11, v190, v189 :: v_dual_fmac_f32 v12, v191, v188
-v_dual_fmac_f32 v17, v190, v184 :: v_dual_fmac_f32 v14, v191, v185
-v_dual_fmac_f32 v15, v191, v184 :: v_dual_fmac_f32 v16, v190, v185
-v_dual_fmac_f32 v21, v194, v184 :: v_dual_fmac_f32 v18, v195, v185
-v_dual_fmac_f32 v19, v194, v185 :: v_dual_fmac_f32 v20, v195, v184
-v_dual_fmac_f32 v25, v194, v188 :: v_dual_fmac_f32 v22, v195, v189
-v_dual_fmac_f32 v23, v195, v188 :: v_dual_fmac_f32 v24, v194, v189
-v_dual_fmac_f32 v29, v198, v188 :: v_dual_fmac_f32 v26, v199, v189
-v_dual_fmac_f32 v27, v198, v189 :: v_dual_fmac_f32 v28, v199, v188
-v_dual_fmac_f32 v33, v198, v192 :: v_dual_fmac_f32 v30, v199, v193
-v_dual_fmac_f32 v31, v199, v192 :: v_dual_fmac_f32 v32, v198, v193
-v_dual_fmac_f32 v37, v186, v192 :: v_dual_fmac_f32 v34, v187, v193
-v_dual_fmac_f32 v35, v186, v193 :: v_dual_fmac_f32 v36, v187, v192
-v_dual_fmac_f32 v41, v186, v196 :: v_dual_fmac_f32 v38, v187, v197
-v_dual_fmac_f32 v39, v187, v196 :: v_dual_fmac_f32 v40, v186, v197
-v_dual_fmac_f32 v45, v190, v196 :: v_dual_fmac_f32 v42, v191, v197
-v_dual_fmac_f32 v43, v190, v197 :: v_dual_fmac_f32 v44, v191, v196
-v_dual_fmac_f32 v49, v190, v192 :: v_dual_fmac_f32 v46, v191, v193
-v_dual_fmac_f32 v47, v191, v192 :: v_dual_fmac_f32 v48, v190, v193
-v_dual_fmac_f32 v53, v194, v192 :: v_dual_fmac_f32 v50, v195, v193
-v_dual_fmac_f32 v51, v194, v193 :: v_dual_fmac_f32 v52, v195, v192
-v_dual_fmac_f32 v57, v194, v196 :: v_dual_fmac_f32 v54, v195, v197
-v_dual_fmac_f32 v55, v195, v196 :: v_dual_fmac_f32 v56, v194, v197
-v_dual_fmac_f32 v61, v198, v196 :: v_dual_fmac_f32 v58, v199, v197
-v_dual_fmac_f32 v59, v198, v197 :: v_dual_fmac_f32 v60, v199, v196
-v_dual_fmac_f32 v65, v198, v200 :: v_dual_fmac_f32 v62, v199, v201
-v_dual_fmac_f32 v63, v199, v200 :: v_dual_fmac_f32 v64, v198, v201
-v_dual_fmac_f32 v69, v186, v200 :: v_dual_fmac_f32 v66, v187, v201
-v_dual_fmac_f32 v67, v186, v201 :: v_dual_fmac_f32 v68, v187, v200
-v_dual_fmac_f32 v73, v186, v204 :: v_dual_fmac_f32 v70, v187, v205
-v_dual_fmac_f32 v71, v187, v204 :: v_dual_fmac_f32 v72, v186, v205
-v_dual_fmac_f32 v77, v190, v204 :: v_dual_fmac_f32 v74, v191, v205
-v_dual_fmac_f32 v75, v190, v205 :: v_dual_fmac_f32 v76, v191, v204
-v_dual_fmac_f32 v81, v190, v200 :: v_dual_fmac_f32 v78, v191, v201
-v_dual_fmac_f32 v79, v191, v200 :: v_dual_fmac_f32 v80, v190, v201
-v_dual_fmac_f32 v85, v194, v200 :: v_dual_fmac_f32 v82, v195, v201
-v_dual_fmac_f32 v83, v194, v201 :: v_dual_fmac_f32 v84, v195, v200
-v_dual_fmac_f32 v89, v194, v204 :: v_dual_fmac_f32 v86, v195, v205
-v_dual_fmac_f32 v87, v195, v204 :: v_dual_fmac_f32 v88, v194, v205
-v_dual_fmac_f32 v93, v198, v204 :: v_dual_fmac_f32 v90, v199, v205
-v_dual_fmac_f32 v91, v198, v205 :: v_dual_fmac_f32 v92, v199, v204
-v_dual_fmac_f32 v97, v198, v208 :: v_dual_fmac_f32 v94, v199, v209
-v_dual_fmac_f32 v95, v199, v208 :: v_dual_fmac_f32 v96, v198, v209
-v_dual_fmac_f32 v101, v186, v208 :: v_dual_fmac_f32 v98, v187, v209
-v_dual_fmac_f32 v99, v186, v209 :: v_dual_fmac_f32 v100, v187, v208
-v_dual_fmac_f32 v105, v186, v212 :: v_dual_fmac_f32 v102, v187, v213
-v_dual_fmac_f32 v103, v187, v212 :: v_dual_fmac_f32 v104, v186, v213
-v_dual_fmac_f32 v109, v190, v212 :: v_dual_fmac_f32 v106, v191, v213
-v_dual_fmac_f32 v107, v190, v213 :: v_dual_fmac_f32 v108, v191, v212
-v_dual_fmac_f32 v113, v190, v208 :: v_dual_fmac_f32 v110, v191, v209
-v_dual_fmac_f32 v111, v191, v208 :: v_dual_fmac_f32 v112, v190, v209
-v_dual_fmac_f32 v117, v194, v208 :: v_dual_fmac_f32 v114, v195, v209
-v_dual_fmac_f32 v115, v194, v209 :: v_dual_fmac_f32 v116, v195, v208
-v_dual_fmac_f32 v121, v194, v212 :: v_dual_fmac_f32 v122, v195, v213
-v_dual_fmac_f32 v123, v195, v212 :: v_dual_fmac_f32 v120, v194, v213
-v_dual_fmac_f32 v129, v198, v212 :: v_dual_fmac_f32 v126, v199, v213
-v_dual_fmac_f32 v127, v198, v213 :: v_dual_fmac_f32 v124, v199, v212
-v_dual_fmac_f32 v133, v198, v184 :: v_dual_fmac_f32 v214, v199, v185
-v_dual_fmac_f32 v131, v199, v184 :: v_dual_fmac_f32 v128, v198, v185
-
-s_setprio 0
-
-
-
-	s_clause 0xB;
- ;A on bank 2-3 
-	ds_load_b64 v[186:187], v183
-	ds_load_b64 v[190:191], v183 offset: 8
-	ds_load_b64 v[194:195], v183 offset: 64
-	ds_load_b64 v[198:199], v183 offset: 72
-	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -1141,7 +1136,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
@@ -1157,7 +1151,7 @@ s_setprio 0
 	v_add_nc_u32_e32 v202, 0x200, v202
 	s_waitcnt lgkmcnt(0)
 
-;	; new vpgrs allocation
+;	new vpgrs allocation
 
 v_dual_fmac_f32 v5, v186, v184 :: v_dual_fmac_f32 v2, v187, v185
 s_setprio 1
@@ -1236,7 +1230,6 @@ s_setprio 0
 	ds_load_b64 v[194:195], v183 offset: 64
 	ds_load_b64 v[198:199], v183 offset: 72
 	
-;	s_addk_i32 s14, 0x200
 
  ;B on bank 0-1 
 	ds_load_b64 v[184:185], v202
