@@ -1,11 +1,5 @@
  #!/bin/bash
  export HIP_PLATFORM=amd
-#  hipcc -c -std=c++17 -O3 --offload-arch=gfx1100 src/main.cpp -o main.o
-#  hipcc -c -std=c++17 -O3 --offload-arch=gfx1100 src/kernel.cpp -o main.o
-#  hipcc -c -std=c++17 -O3 --offload-arch=gfx1100 src/main.cpp -o main.o
-#  hipcc -c -std=c++17 -O3 --offload-arch=gfx1100 src/main.cpp -o main.o
-#  hipcc -c -std=c++17 -O3 --offload-arch=gfx1100 src/main.cpp -o main.o
-#  hipcc -lrocblas -mcumode -std=c++17 -O3 --offload-arch=gfx1100 src/*.cpp -o sgemm
 
 mkdir -p tmp
 rm tmp/*.o
