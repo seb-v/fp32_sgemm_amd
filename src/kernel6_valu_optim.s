@@ -389,7 +389,7 @@ kernel:                                 ; @kernel
 
 	v_mov_b32_e32 v5, 0
 	v_mov_b32_e32 v3, 0
-	s_add_i32 s7, s4, -1
+	s_add_i32 s7, s4, -8
 	s_add_u32 s8, s8, 32
 	s_addc_u32 s9, s9, 0
 	s_mov_b32 s12, 0

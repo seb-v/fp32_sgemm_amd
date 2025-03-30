@@ -86,7 +86,7 @@ kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
     {
         float regA[nbReadsA];
         float regB[nbReadsB];
-        if (kId < N - 1)
+        if (kId < N - BK)
         {
             // We populate the Shared Memory with Ks row and columns
             for (int i = 0; i < nbReadsB; i++)
@@ -151,7 +151,7 @@ kernel5_lds_optim(float *a, float *b, float *c, int N, float alpha, float beta)
             }
         }
         __syncthreads();
-        if (kId < N - 1)
+        if (kId < N - BK)
         {
             for (int i = 0; i < nbReadsB; i++)
             {
