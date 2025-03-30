@@ -79,6 +79,8 @@ namespace
         CHECK_HIP_STATUS(hipMalloc((void **)&d_A, N * N * sizeof(float)));
         CHECK_HIP_STATUS(hipMalloc((void **)&d_B, N * N * sizeof(float)));
         CHECK_HIP_STATUS(hipMalloc((void **)&d_C, N * N * sizeof(float)));
+        
+        CHECK_HIP_STATUS(hipMemset(d_C, 0, N * N * sizeof(float)));
 
         // Copy vectors from host to device
         CHECK_HIP_STATUS(hipMemcpy(d_A, h_A, N * N * sizeof(float), hipMemcpyHostToDevice));
